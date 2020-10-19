@@ -48,7 +48,7 @@ module.exports = {
   '@nuxtjs/auth'
 ],
 axios: {
-  baseURL: 'https://vk-clone.herokuapp.com/', // Used as fallback if no runtime config is provided
+  baseURL: 'http://0.0.0.0:8000/', // Used as fallback if no runtime config is provided
 },
 
 
