@@ -24,11 +24,6 @@ async function start() {
   } else {
     await nuxt.ready();
   }
-  console.log("SOMETHING///////////////////////////////////////")
-  app.use(function (req, res, next) {
-    console.log('BAD Time IS:', Date.now())
-    next()
-  })
   app.use(bodyParser.urlencoded({ extended: false }))
   app.use(bodyParser.json())
   app.use(userRouter)

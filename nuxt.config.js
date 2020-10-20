@@ -47,9 +47,6 @@ module.exports = {
   '@nuxtjs/axios',
   '@nuxtjs/auth'
 ],
-axios: {
-  baseURL: '/', // Used as fallback if no runtime config is provided
-},
 
 
 auth: {
