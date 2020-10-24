@@ -10,6 +10,32 @@
         outlined
         tile
       >
+      <ul class="no-bullets">
+        <li>
+          <v-icon color="#99b0c6">fas fa-house-user</v-icon>
+          <span>My profile</span>
+        </li>
+        <li>
+          <v-icon color="#99b0c6">fas fa-newspaper</v-icon>
+          <span>News</span>
+        </li>
+        <li>
+          <v-icon>fas fa-envelope</v-icon>
+          <span>Messenger</span>
+        </li>
+        <li>
+          <v-icon color="#99b0c6">fas fa-user-friends</v-icon>
+          <span>Friends</span>
+        </li>
+        <li>
+          <v-icon color="#99b0c6">fas fa-images</v-icon>
+          <span>Photos</span>
+        </li>
+        <li>
+          <v-icon color="#99b0c6">fas fa-music</v-icon>
+          <span>Music</span>
+        </li>
+      </ul>
        
       </v-card>
             <v-card
@@ -52,26 +78,42 @@ export default {
      // email: localStorage.getItem('email')
     }
   },
-  methods: {
-    async logout() {
-      await this.$auth.logout();
-    }
-  },
   middleware: 'notLoggedIn'
 };
 </script>
 
 <style scoped>
+.v-icon{
+  margin-right: 10px;
+}
+
+.fa-envelope:before {
+    content: "\f0e0";
+    color: #99b0c6;
+}
+ul.no-bullets {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+ul.no-bullets > *{
+  margin-bottom: 10px;
+}
+ul.no-bullets > *:hover{
+  background-color: #dce1e6;
+  cursor: pointer;
+}
 .container{
-width: 1000px;
-height: 50px;
+  width: 1000px;
   min-width: 1000px;
-  margin-top: 50px;
+  margin-top: 10px;
   background:#EDEEF0;
 }
 .menu{
   width: 180px;
   min-width: 180px;
+  background:#EDEEF0;
+  color: #4f759a;
 }
 .photo{
   width: 200px;

@@ -3,7 +3,7 @@
 
   <div class="middle">
     <div class="item">
-     <nuxt-link to="/">
+     <nuxt-link to="/profile">
         <v-icon>fab fa-vk</v-icon>
         <span class="pl-5 font-weight-medium stayHome">#stayhome</span>
       </nuxt-link>
@@ -25,30 +25,36 @@
         :background-color="color"
       ></v-text-field>
     </div>
-          
+       
 <div class="item"> 
   <div class="myspacing">
     <v-menu offset-y class="ml-10">
       <template v-slot:activator="{ on, attrs }">
         <v-btn
-     
+          id="lowercase"
            class="btn--flat"
           color="#4a76a8"
           dark
           v-bind="attrs"
           v-on="on"
         >
-          {{ loggedInUser.firstname}}
+          {{ loggedInUser.firstname }}
         </v-btn>
       </template>
       <v-list color="#ffffff">
-        <v-list-item
-        color="#ffffff"
-          v-for="(item, index) in items"
-          :key="index"
-        >
-          <v-list-item-title>{{ item.title }}</v-list-item-title>
+
+        <v-list-item color="#ffffff">
+          <v-list-item-title>Settings</v-list-item-title>
         </v-list-item>
+
+        <v-list-item color="#ffffff">
+          <v-list-item-title>Help</v-list-item-title>
+        </v-list-item>
+
+        <v-list-item color="#ffffff">
+          <v-list-item-title @click="logout">Log out</v-list-item-title>
+        </v-list-item>
+
       </v-list>
     </v-menu>
   </div>
@@ -64,9 +70,8 @@ export default {
   data() {
     return {
          items: [
-        { title: 'Click Me' },
-        { title: 'Click Me' },
-        { title: 'Click Me' },
+        { title: 'Settings' },
+        { title: 'Help' },
         { title: 'Log out' },
       ],
         color : '#224B7A'
@@ -78,11 +83,22 @@ export default {
 methods: {
     changeColor: function (color) {
       this.color = color
+    },
+    async logout() {
+      await this.$auth.logout();
+      this.$router.push('/')
     }
   }
 };
 </script>
-<style>
+<style scoped>
+#lowercase{
+  text-transform: lowercase;
+  text-transform: capitalize;
+}
+.v-list-item{
+  cursor: pointer;
+}
 
 .nav {
   display: flex;
