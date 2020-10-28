@@ -3,11 +3,13 @@ if (process.env.NODE_ENV !== 'production') {
 }
 const consola = require('consola');
 const { Nuxt, Builder } = require('nuxt');
-const { app, server } = require('./app');
 const bodyParser= require('body-parser')
 const userRouter = require('./routers/user')
 //require mongodb connection
-require('./mongodb/connect')
+//require('./mongodb/connect')
+
+const app = require("express")();
+const server = require("http").createServer(app);
 
 const config = require('../nuxt.config.js');
 config.dev = process.env.NODE_ENV !== 'production';

@@ -4,6 +4,8 @@ const auth = require('../middleware/auth')
 const jwt = require('jsonwebtoken')
 const ejwt = require('express-jwt')
 
+const upload = require('../mongodb/connect')
+
 const router = express.Router()
 
 router.post('/reg', async (req, res) => {

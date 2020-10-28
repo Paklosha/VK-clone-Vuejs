@@ -38,23 +38,87 @@
       </ul>
        
       </v-card>
-            <v-card
-       
-     
+
+      <v-card
         class="pa-2 photo"
-        outlined
-        tile
       >
-       
+            <v-dialog
+               v-model="dialog"
+               width="120vh"
+               style="overflow: hidden;"
+            >
+                <template v-slot:activator="{ on, attrs }">
+                 <img 
+                  src="~/assets/2T_avt9uweY.jpg"
+                  alt=""
+                  class="profilePhoto"
+                  v-bind="attrs"
+                  v-on="on"
+                 >
+               </template>
+
+               <v-card
+                 height="80vh"
+                 color="#ffffff"
+                 style="overflow: hidden; color: #4a7197;"
+               >
+                  <v-row
+                  height="80vh"
+                  no-gutters
+                  >
+                  <v-col 
+                    cols="9"
+                  >
+
+                  <img 
+                  src="~/assets/2T_avt9uweY.jpg"
+                  alt=""
+                  class="profilePhotoDialog"
+                  >
+                
+                </v-col>
+                <v-col 
+                cols="3"
+                id="infoCol"
+                >
+                  <v-row>
+                    <v-col cols="3">
+                  <img 
+                  src="~/assets/2T_avt9uweY.jpg"
+                  alt=""
+                  class="profilePhotoSmall"
+                  >
+                  </v-col>
+                  <v-col cols="9">
+ 
+                <span class="nameAndDate">{{loggedInUser.firstname +' '+loggedInUser.lastname}}</span><br>
+
+                <span class="nameAndDate">дата публикации фото</span>
+                </v-col>
+                </v-row>
+                <v-divider></v-divider>
+
+ <v-icon
+               :color="isLiked ? '#99b0c6' : 'red'"
+              @click ="() => (isLiked = !isLiked)"
+ 
+  id="likeBtn">
+  fas fa-heart
+  </v-icon>
+
+
+                </v-col>
+                  </v-row>
+                </v-card>
+            </v-dialog>
       </v-card>
-            <v-card
-       
-     
+
+       <v-card
         class="pa-2 info"
         outlined
         tile
       >
-      
+      <h1 class="username">{{loggedInUser.firstname +' '+loggedInUser.lastname}}</h1>
       </v-card>
     </v-card>
   
@@ -76,6 +140,8 @@ export default {
     data: function () {
     return {
      // email: localStorage.getItem('email')
+     dialog: false,
+     isLiked: true
     }
   },
   middleware: 'notLoggedIn'
@@ -83,6 +149,42 @@ export default {
 </script>
 
 <style scoped>
+#likeBtn{
+  cursor: pointer;
+  margin-left: 15px;
+}
+.nameAndDate{
+font-size: 13px;
+font-weight: 500;
+}
+#infoCol{
+  height: 80vh;
+}
+
+.username{
+  display: block;
+margin-left: 20px;
+margin-top: 20px;
+    font-size: 19px;
+    line-height: 25px;
+    font-weight: 400;
+}
+.profilePhoto{
+  width: 200px;
+  height: 200px;
+  padding-right: 4px;
+}
+.profilePhotoSmall{
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  margin-top: 5px;
+  margin-left: 15px;
+}
+.profilePhotoDialog{
+height: 80vh;
+width: 89vh;
+}
 .v-icon{
   margin-right: 10px;
 }
@@ -116,13 +218,14 @@ ul.no-bullets > *:hover{
   color: #4f759a;
 }
 .photo{
-  width: 200px;
+  width: 230px;
   background-color: #ffffff;
   margin-left: 16px;
   margin-right: 16px;
   min-width: 200px;
 }
 .info{
+  color: #000000;
   width: 550px;
   min-width: 550px;
    background-color: #ffffff !important;

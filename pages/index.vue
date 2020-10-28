@@ -114,7 +114,7 @@
           <v-text-field
           name="firstname"
           v-model="firstname"
-          :rules="nameRules"
+          :rules="firstnameRules"
           dark
           placeholder="First name"
           color="#4a76a8"
@@ -127,7 +127,7 @@
           ></v-text-field>
              <v-text-field
              name="lastname"
-             :rules="nameRules"
+             :rules="lastnameRules"
              v-model="lastname"
              placeholder="Last name"
              color="#4a76a8"
@@ -281,10 +281,18 @@ export default {
       1996,1995,1994,1993,1992,1991,1990
     ],
     isValid: true,
-    nameRules: [
-      v => !!v || "Name is required",
+    firstnameRules: [
+      v => !!v || "First name is required",
       v => (v && v.length <= 16) || "Name must be less than 16 characters",
-      v => (v && v.length >= 1) || "Name must be more than 4 characters"
+      v => (v && v.length >= 1) || "Name must be more than 1 characters",
+
+        v => (v.charAt(0).toUpperCase() + v.slice(1) == v) || "First name in the incorrect form"
+    ],
+    lastnameRules: [
+      v => !!v || "Last name is required",
+      v => (v && v.length <= 16) || "Name must be less than 16 characters",
+      v => (v && v.length >= 1) || "Name must be more than 1 characters",
+  v => (v.charAt(0).toUpperCase() + v.slice(1) == v) || "Last name in the incorrect form"
     ],
       passwordRulesLogin: [
       v => !!v || "Password is required",
