@@ -31,6 +31,7 @@ router.post('/reg', async (req, res) => {
 })
 
 router.post('/login', async(req, res) => {
+  console.log('NOuuuuseeer')
   //Login a registered user
   try {
       const { email, password } = req.body
@@ -50,7 +51,7 @@ router.post('/login', async(req, res) => {
 
 })
   router.get('/user',ejwt({ secret: process.env.TOKEN_SECRET, algorithms: ['HS256'] }),async (req, res,next) => {
-    //console.log(req)
+    console.log(await User.findOne({ _id: req.user._id}))
     //const data = jwt.verify(token, process.env.TOKEN_SECRET)
     const {firstname,lastname,email} = await User.findOne({ _id: req.user._id})
     const user = {

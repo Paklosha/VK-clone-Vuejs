@@ -2,7 +2,11 @@
   "name": "vk-clone",
   "version": "1.0.0",
   "description": "VK clone on Nuxt.js",
-  "author": "Vladislav Poklonskiy",
+  "author": {
+    "name": "Vladislav Poklonskiy",
+    "email": "paklosha@gmail.com",
+    "url": "https://github.com/Paklosha"
+  },
   "private": false,
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
