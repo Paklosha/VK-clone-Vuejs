@@ -23,6 +23,7 @@ async function start() {
   if (config.dev) {
     const builder = new Builder(nuxt);
     await builder.build();
+    console.log('done')
   } else {
     await nuxt.ready();
   }
@@ -33,7 +34,7 @@ async function start() {
 
   server.listen(PORT, () => {
     consola.ready({
-      message: `Server started successfully`,
+      message: `Server started successfully on port `+ PORT,
       badge: true,
     });
   });

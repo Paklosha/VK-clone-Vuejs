@@ -14,7 +14,8 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      {href:"https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap", rel:"stylesheet"}
+      { href:"https://fonts.googleapis.com/css2?family=Roboto&display=swap",rel:"stylesheet"},
+      { href:"https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap", rel:"stylesheet"}
     ],
   },
   /*
@@ -31,8 +32,8 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    { src: '~/plugins/socket.client.js' },
     { src: '~/plugins/vuetify.js' },
+    { src: '~/plugins/socket.client.js' },
   ],
   /*
   ** Nuxt.js dev-modules
@@ -64,7 +65,7 @@ auth: {
         login: '/',
         logout: '',
         callback: '/',
-        home: '/profile'
+        home: '/'
         }
     }
   }

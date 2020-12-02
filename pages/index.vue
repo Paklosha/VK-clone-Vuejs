@@ -246,7 +246,7 @@
 <script>
 import { mapActions } from "vuex";
 import Snackbar from "@/components/Snackbar";
-import messageDict from "@/lib/messageDict";
+
 
 export default {
   middleware: 'loggedIn',
@@ -337,14 +337,14 @@ export default {
             year: this.year
         })
 
-        await this.$auth.loginWith('local', {
+        let response = await this.$auth.loginWith('local', {
           data: {
           email: this.emailRegistration,
           password: this.passwordRegistration
           }
         })
         
-        this.$router.push('/profile')
+        this.$router.push(response.data.id)
       } catch (e) {
         //this.error = e.response.data.message
        alert('reg error is ' + e.response.data.message)
@@ -359,14 +359,14 @@ export default {
 
         if(this.$refs.formLogin.validate()){
             try {
-              await this.$auth.loginWith('local', {
+              let response = await this.$auth.loginWith('local', {
                   data: {
                   email: this.emailLogin,
                   password: this.passwordLogin
                   }
               })
 
-              this.$router.push('/profile')
+              this.$router.push(response.data.id)
             } catch (e) {
                 //this.error = e.response.data.message
                 this.snackbarLogin = true

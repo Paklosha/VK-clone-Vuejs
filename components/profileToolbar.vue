@@ -1,15 +1,16 @@
 <template>
      <div class="nav">
 
-  <div class="middle">
+  <div class="middle d-flex justify-space-between">
+    <div class="item">
     <div class="item">
      <nuxt-link to="/profile">
-        <v-icon>fab fa-vk</v-icon>
-        <span class="pl-5 font-weight-medium stayHome">#stayhome</span>
+        <v-icon id="vk-logo">fab fa-vk</v-icon>
       </nuxt-link>
+      
      </div>
 
-    <div class="item">
+    <div class="item" style="margin-left:110px;">
       <v-text-field
       shrink
      
@@ -25,9 +26,9 @@
         :background-color="color"
       ></v-text-field>
     </div>
-       
-<div class="item"> 
-  <div class="myspacing">
+       </div>
+<div class="item" style="margin-top:4px;"> 
+  
     <v-menu offset-y class="ml-10">
       <template v-slot:activator="{ on, attrs }">
         <v-btn
@@ -57,7 +58,7 @@
 
       </v-list>
     </v-menu>
-  </div>
+  
   </div>
    </div> 
 </div>
@@ -103,36 +104,39 @@ methods: {
 .nav {
   display: flex;
   height: 45px;
-flex-wrap: nowrap;
+  flex-wrap: nowrap;
   align-items: center;
   white-space: nowrap;
+  width: 100vw;
+  background: #4a76a8;
+
 }
 
 .item {
   font-size: 20px;
- height: 20px;
+  height: 20px;
   display: inline-block;
   flex-wrap: nowrap;
   white-space: nowrap;
 
 }
 .middle {
-  flex: 1;
+  margin: 0 auto;
   text-align: center;
   height: 45px;
   background: #4a76a8;
   flex-wrap: nowrap;
   white-space: nowrap;
+  width: 1000px;
+  min-width: 1000px;
+
 }
 .v-input__control{
-height: 10px !important;
+  height: 10px !important;
 }
 .v-text-field {
     padding-top: 6px !important;
    
-}
-.myspacing{
-  margin-left: 400px;
 }
 
 .v-input__slot{
@@ -153,7 +157,7 @@ background-color: red;
 background-color: #f0f2f5;
 }
 .v-toolbar__content{ 
-  width: 90%;
+  width: 100%;
   
 } 
 
@@ -169,5 +173,7 @@ a{
     font-size: 16px;
     color:#809BBA;
 }
-
+#vk-logo{
+  font-size: 35px;
+}
 </style>

@@ -40,12 +40,22 @@ var userSchema = new Schema({
     type: Number, 
     required: true 
   },
-  tokens: [{
-    token: {
-        type: String,
-        required: true
-    }
-}]
+  status   : { 
+    type: String, 
+    default: ''
+  },
+  notifications: {
+    messages: {type: Number,default: 0},
+    friends: {type: Number,default: 0},
+    news: {type: Number,default:0} 
+  },
+  avatar: { 
+    type: String, 
+    default: ''
+  },
+  photos: { 
+    type: [String]
+  },
 });
 
 userSchema.pre('save', async function (next) {
@@ -61,8 +71,6 @@ userSchema.methods.generateAuthToken = async function() {
   // Generate an auth token for the user
   const user = this
   const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET)
-  user.tokens = user.tokens.concat({token})
-  await user.save()
   return token
 }
 
