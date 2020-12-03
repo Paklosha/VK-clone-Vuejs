@@ -228,6 +228,7 @@ export default {
     };
   },
   async asyncData(context) {
+    console.log('aaa')
     //get amount of notifications
        let notifications = await context.app.$axios.$post('/getNotifications', {id: context.store.state.auth.user._id})
  

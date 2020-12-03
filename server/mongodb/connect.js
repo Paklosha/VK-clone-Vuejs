@@ -4,17 +4,12 @@ const crypto = require('crypto');
 const multer = require('multer');
 const GridFsStorage = require('multer-gridfs-storage');
 
-
-
-
-const mongooseConnection = mongoose.createConnection(process.env.MONGODB_URL, {
+mongoose.connect(process.env.MONGODB_URL, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: true,
   useUnifiedTopology: true
 })
-
-
 
 // Create storage engine
 const storage = new GridFsStorage({
@@ -41,5 +36,5 @@ var upload = multer({ storage });
 
 module.exports = {
   upload,
-  mongooseConnection
+  mongooseConnection: mongoose.connection
 };
