@@ -49,7 +49,7 @@ module.exports = {
   '@nuxtjs/auth'
 ],
 axios: {
- // baseURL: ' https://vk-clone.herokuapp.com', // uncomment this code for production
+ baseURL: ' https://vk-clone.herokuapp.com', // uncomment this code for production
 },
 
 
