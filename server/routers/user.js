@@ -137,7 +137,7 @@ let {notifications} = await User.findById( req.body.id)
 
 
   // @route GET /image/:filename
-// @desc Display Image
+// @desc Display Image.
 router.get('/image/:filename', (req, res) => {
 
   console.log(req.params.filename)
