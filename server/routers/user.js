@@ -20,7 +20,7 @@ mongooseConnection.once('open', () => {
 const router = express.Router()
 
 // @route POST /reg
-// @desc User registration
+// @desc User registration.
 router.post('/reg', async (req, res) => {
 
   //user registration
