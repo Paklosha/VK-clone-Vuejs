@@ -73,7 +73,7 @@
                 <template v-slot:activator="{ on, attrs }">
                   <div class="avatar-container">
                  <img 
-                  src="~/assets/avatar.png"
+                  src="http://localhost:3000/image/775c859fcc5c51d8970e4e0251748716.jpg"
                   alt=""
                   class="profilePhoto"
                   v-bind="attrs"
@@ -228,7 +228,7 @@ export default {
     };
   },
   async asyncData(context) {
-    console.log('aaa')
+
     //get amount of notifications
        let notifications = await context.app.$axios.$post('/getNotifications', {id: context.store.state.auth.user._id})
  

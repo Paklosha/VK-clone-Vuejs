@@ -13,7 +13,7 @@ module.exports = {
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' },
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+ 
       { href:"https://fonts.googleapis.com/css2?family=Roboto&display=swap",rel:"stylesheet"},
       { href:"https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap", rel:"stylesheet"}
     ],
@@ -33,6 +33,7 @@ module.exports = {
   */
   plugins: [
     { src: '~/plugins/vuetify.js' },
+    { src: '~/plugins/axios.js' },
     { src: '~/plugins/socket.client.js' },
   ],
   /*
@@ -48,9 +49,7 @@ module.exports = {
   '@nuxtjs/axios',
   '@nuxtjs/auth'
 ],
-axios: {
-// baseURL: ' https://vk-clone.herokuapp.com', // uncomment this code for production
-},
+
 
 
 auth: {
@@ -73,14 +72,14 @@ auth: {
 
   pwa: {
     manifest: {
-      name: 'Nuxt.js VK clone',
+      name: 'VK clone',
       short_name: 'VK',
       start_url: '/',
-      theme_color: '#424242',
+      theme_color: '#4a76a8',
       display: 'standalone',
     },
     icon: {
-      iconSrc: './static/favicon.ico',
+      iconSrc: './static/icon.png',
     },
   },
   /*
