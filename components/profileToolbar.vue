@@ -109,6 +109,7 @@ methods: {
   white-space: nowrap;
   width: 100vw;
   background: #4a76a8;
+  z-index: 1000;
 
 }
 

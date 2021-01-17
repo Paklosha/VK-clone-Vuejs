@@ -21,7 +21,7 @@ module.exports = {
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#fff' },
+  loading: false,
   //serverMiddleware: ['~/api/logger'],
   /*
   ** Global CSS
@@ -33,7 +33,7 @@ module.exports = {
   */
   plugins: [
     { src: '~/plugins/vuetify.js' },
-    { src: '~/plugins/axios.js' },
+   { src: '~/plugins/axios.js' },
     { src: '~/plugins/socket.client.js' },
   ],
   /*

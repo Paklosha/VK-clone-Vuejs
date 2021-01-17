@@ -251,7 +251,7 @@ import Snackbar from "@/components/Snackbar";
 export default {
   middleware: 'loggedIn',
   name: "Home",
-  layout: "login",
+
   components: {
     Snackbar
   },

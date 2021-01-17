@@ -118,16 +118,47 @@ let {notifications} = await User.findById( req.body.id)
          res.status(201).json(notifications)
   })
 
+    // @route POST /getAvatarById
+  // @desc Getting user's avatar by id
+  router.post('/getAvatarById', async (req, res) => {
+    //req.body.id
+    let {avatar} = await User.findById(req.body.id)
+             res.status(201).json(avatar)
+      })
+
+  // @route POST /getNumberOfPhotos
+  // @desc Getting the number of user's photos
+  router.post('/getNumberOfPhotos', async (req, res) => {
+    //req.body.id
+    let {photos} = await User.findById(req.body.id)
+    res.status(201).json(photos.length)
+      })
+
   // @route POST /uploadPhoto
   // @desc Uploading a photo
-  router.post('/uploadPhoto', upload.single('file'), async (req, res) => {
-   console.log(req.file)
+  router.post('/uploadAvatar', upload.single('file'), (req, res) => {
+   /*console.log(req.file)
    console.log(req.body.userId)
-
-   await User.updateOne({ _id: req.body.userId },{
-     avatar: req.file.id,
-     $push: { photos: req.file.id }
-    });
+   console.log('avatar')
+   console.log(req.body.avatar)
+   console.log('is')*/
+   // delete the avatar from main array of photos, if an avatar already exists there.
+   console.log(req.body.avatar)
+   if(req.body.avatar) 
+User.updateOne( {_id: req.body.userId}, { $pull: {photos: [req.body.avatar] } } )
+   // Adding the avatar to the main array of photos and to the avatar field 
+   User.updateOne({ _id: req.body.userId },{
+     avatar: req.file.filename,
+     $push: { photos: req.file.filename }
+    },function (err, docs) { 
+      if (err){ 
+          console.log(err) 
+      } 
+      else{ 
+          console.log("Updated Docs : ", docs); 
+      } 
+  });
+   // console.log(resu)
 
   
 
@@ -140,9 +171,6 @@ let {notifications} = await User.findById( req.body.id)
 // @desc Display Image.
 router.get('/image/:filename', (req, res) => {
 
-  console.log(req.params.filename)
-  console.log('////////////////')
-  console.log(gfs)
   gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
     // Check if file
     if (!file || file.length === 0) {
