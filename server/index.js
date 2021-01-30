@@ -5,11 +5,9 @@ const consola = require('consola');
 const { Nuxt, Builder } = require('nuxt');
 const bodyParser= require('body-parser')
 const userRouter = require('./routers/user')
-//require mongodb connection
-//require('./mongodb/connect')
 
-const app = require("express")();
-const server = require("http").createServer(app);
+
+const { app, server } = require('./sockets/app');
 
 const config = require('../nuxt.config.js');
 config.dev = process.env.NODE_ENV !== 'production';
@@ -34,8 +32,13 @@ async function start() {
   server.listen(PORT, () => {
     consola.ready({
       message: `Server started successfully on port `+ PORT,
-      badge: true,
+      badge: true
     });
   });
 }
 start();
+
+module.exports = {
+  app,
+  server,
+};

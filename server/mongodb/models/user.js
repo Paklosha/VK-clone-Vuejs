@@ -7,6 +7,14 @@ var Schema = mongoose.Schema;
 
 // create a schema
 var userSchema = new Schema({
+  lastActivity: { 
+    type: Date, 
+    default: new Date() 
+  },
+  isOnline: { 
+    type: Boolean, 
+    default: false 
+  },
   firstname: { 
     type: String, 
     required: true 

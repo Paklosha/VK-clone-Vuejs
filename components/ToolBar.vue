@@ -1,15 +1,17 @@
 <template>
-     <div>
+  
     <v-app-bar
+      v-bind:class="{'d-none': !contentVisible}"
       color="#4a76a8"
       dense
       dark
     >
+    
       <nuxt-link to="/">
         <v-icon>fab fa-vk</v-icon>
         <span class="pl-5 font-weight-medium stayHome">#stayhome</span>
       </nuxt-link>
-      <v-col cols="8"  sm="5" md="4" lg="3" class="qwerty">
+      <v-col cols="8"  sm="5" md="4" lg="4" class="qwerty">
                 
       <v-text-field
       placeholder="Search"
@@ -28,11 +30,15 @@
 
       
     </v-app-bar>
-  </div>
+  
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
+   computed:{
+   ...mapState(["contentVisible"])
+ },
   data() {
     return {
         color : '#224B7A'
@@ -46,9 +52,10 @@ methods: {
 };
 </script>
 <style>
+
 .v-toolbar__content{ 
-  width: 90%;
-  left:  10%; 
+  max-width: 1000px;
+  margin: 0 auto;
 } 
 
 a{

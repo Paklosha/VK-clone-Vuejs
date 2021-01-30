@@ -5,9 +5,9 @@
       flat
       tile
     >
-      <div id="loader" v-show="isLoader"></div>
+  
       <v-card
-        class="menu"
+        class="general"
         outlined
         tile
       >
@@ -82,7 +82,7 @@
 import { mapGetters } from 'vuex'
 import { mapState } from 'vuex'
 export default {
-  layout: "profile",
+   layout: "profile",
   methods:{
      openFullUserInfo: function (){
        if(this.hideShowUserInfoBtn == 'Show full information'){
@@ -216,7 +216,7 @@ ul.no-bullets > *:hover + .notification{
   background:#EDEEF0;
   padding-left: 18px;
 }
-.menu{
+.general{
   font-size: 14px;
 
   min-width: 180px;

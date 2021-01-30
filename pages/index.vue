@@ -2,7 +2,8 @@
   <v-row
     class="flex-nowrap justify-center"
   > 
-
+<div id="loader"
+v-bind:class="{'d-none': contentVisible,'d-block': !contentVisible }"></div>
         <v-snackbar
       v-model="snackbarLogin"
       top
@@ -33,7 +34,8 @@
     </v-snackbar>
 
     
-
+<div class="main"
+v-bind:class="{'d-none': !contentVisible}">
     <v-col cols="6" class="mt-10 hidden-sm-and-down">
       <h1 class="">VK for mobile devices</h1>
       <p class="mobAppText">Install our official mobile app and stay in touch
@@ -240,18 +242,19 @@
         </v-card-text>
       </v-card>
     </v-col>
+    </div>
   </v-row>
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapState } from "vuex";
 import Snackbar from "@/components/Snackbar";
 
 
 export default {
   middleware: 'loggedIn',
   name: "Home",
-
+layout: "login",
   components: {
     Snackbar
   },
@@ -314,8 +317,7 @@ export default {
     snackbarRegistration: false
   }),
   computed: {
-    message() {
-    },
+    ...mapState(["contentVisible"])
   },
   mounted() {
   },
@@ -343,8 +345,8 @@ export default {
           password: this.passwordRegistration
           }
         })
-        
-        this.$router.push(response.data.id)
+              
+        location.replace(`${this.$url}/${response.data.id}`)
       } catch (e) {
         //this.error = e.response.data.message
        alert('reg error is ' + e.response.data.message)
@@ -365,10 +367,11 @@ export default {
                   password: this.passwordLogin
                   }
               })
-
-              this.$router.push(response.data.id)
+      
+      
+             location.replace(`${this.$url}/${response.data.id}`)
             } catch (e) {
-                //this.error = e.response.data.message
+          
                 this.snackbarLogin = true
                 this.passwordLogin = ''
              }
@@ -383,6 +386,13 @@ export default {
 </script>
 <style>
 
+.main{
+  display: flex;
+  justify-content: space-between;
+  width: 1000px;
+  max-width: 1000px;
+  margin: auto;
+}
 
 .v-input--selection-controls__ripple {
     border-radius: 50%;

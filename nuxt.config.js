@@ -27,14 +27,16 @@ module.exports = {
   ** Global CSS
   */
   css: [
+    '~/assets/styles/loader.css'
   ],
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
     { src: '~/plugins/vuetify.js' },
-   { src: '~/plugins/axios.js' },
-    { src: '~/plugins/socket.client.js' },
+    { src: '~/plugins/axios.js' },
+   { src: '~/plugins/socket.client.js' }, // only in client side
+    { src: '~/plugins/globalUrl.client.js'}, // only in client side
   ],
   /*
   ** Nuxt.js dev-modules

@@ -1,8 +1,10 @@
 <template>
     <v-footer
+      v-bind:class="{'d-none': !contentVisible}"
       height="80"
       padless
       class="font-weight-medium"
+      id="footer"
     >
       <v-row
         justify="space-around"
@@ -44,12 +46,11 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
-  data() {
-    return {
-       
-    };
-},
+ computed:{
+   ...mapState(["contentVisible"])
+ },
 methods: {
     
   }

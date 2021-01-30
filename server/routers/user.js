@@ -70,6 +70,7 @@ router.post('/login', async(req, res) => {
 // @route GET /user
 // @desc Fing and get a user by id
   router.get('/user',ejwt({ secret: process.env.TOKEN_SECRET, algorithms: ['HS256'] }),async (req, res,next) => {
+    
     const {firstname,lastname,email,_id} = await User.findOne({ _id: req.user._id})
 
     const user = {
@@ -84,6 +85,7 @@ router.post('/login', async(req, res) => {
   // @route POST /getPublicUserById
   // @desc Get public information about a user by id
   router.post('/getPublicUserById', async (req, res) => {
+   
  if(mongoose.Types.ObjectId.isValid(req.body.id))
     var doesUserExists = await User.exists({ _id: req.body.id })
 
@@ -95,13 +97,38 @@ if(!doesUserExists) {
       res.status(404).end()  
     }
     else {
+      let lastActivity = 'just now'
+      let minutesOffline  =  Math.floor((new Date().getTime() - user.lastActivity.getTime())
+      /(1000 * 60));
+      let hoursOffline    =  Math.floor((new Date().getTime() - user.lastActivity.getTime())
+      /(1000 * 60 * 60));
+      let daysOffline     =  Math.floor((new Date().getTime() - user.lastActivity.getTime())
+      /(1000 * 60 * 60 * 24));
+console.log(minutesOffline)
+console.log(hoursOffline)
+console.log(daysOffline)
+      if (hoursOffline < 1 && minutesOffline > 0) lastActivity = 
+         `last seen ${minutesOffline}${minutesOffline == 1 ? ' minute': ' minutes'} ago`
+      if (daysOffline  < 1 && hoursOffline   > 0) lastActivity = 
+         `last seen ${hoursOffline}${hoursOffline == 1 ? ' hour': ' hours'} ago`
+      if (daysOffline  < 28 && daysOffline   > 0) lastActivity = 
+          `last seen ${daysOffline}${daysOffline == 1 ? ' day': ' days'} ago`
+      if (daysOffline > 28) lastActivity = 
+          `last seen 
+          ${user.lastActivity.getDate()} 
+          ${user.lastActivity.toLocaleString('en', { month: 'long' })}
+          ${user.lastActivity.getFullYear()}`;
+
       res.status(201).json({
         firstname : user.firstname,
         lastname : user.lastname,
         gender : user.gender,
         day : user.day,
         month : user.month,
-        year : user.year
+        year : user.year,
+        publicAvatar : user.avatar,
+        online : user.isOnline,
+        lastActivity : lastActivity
       })
     }
 })
@@ -136,49 +163,40 @@ let {notifications} = await User.findById( req.body.id)
 
   // @route POST /uploadPhoto
   // @desc Uploading a photo
-  router.post('/uploadAvatar', upload.single('file'), (req, res) => {
-   /*console.log(req.file)
-   console.log(req.body.userId)
-   console.log('avatar')
-   console.log(req.body.avatar)
-   console.log('is')*/
+  router.post('/uploadAvatar', upload.single('file'), async (req, res) => {
+
    // delete the avatar from main array of photos, if an avatar already exists there.
-   console.log(req.body.avatar)
+
    if(req.body.avatar) 
-User.updateOne( {_id: req.body.userId}, { $pull: {photos: [req.body.avatar] } } )
+await User.updateOne( {_id: req.body.userId}, { $pull: {photos: [req.body.avatar] } } )
    // Adding the avatar to the main array of photos and to the avatar field 
-   User.updateOne({ _id: req.body.userId },{
+  await User.updateOne({ _id: req.body.userId },{
      avatar: req.file.filename,
      $push: { photos: req.file.filename }
-    },function (err, docs) { 
-      if (err){ 
-          console.log(err) 
-      } 
-      else{ 
-          console.log("Updated Docs : ", docs); 
-      } 
-  });
-   // console.log(resu)
-
-  
-
-    //res.json({ file: req.file });
-    res.redirect('/');
+    });
+   // res.status(200).json({avatar:'avatarechik'})
+   res.status(201).end()
   });
 
+
+  // @route DELETE /deleteAvatar
+// @desc Deleting current user's avatar
+router.delete('/deleteAvatar', async (req, res) => {
+  await User.updateOne( { avatar: req.body.avatar }, { $pull: {photos: req.body.avatar } } )
+  await User.updateOne({ avatar: req.body.avatar },{avatar: ''})
+  res.status(200)
+})
 
   // @route GET /image/:filename
 // @desc Display Image.
-router.get('/image/:filename', (req, res) => {
-
-  gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+router.get('/image/:filename', async (req, res) => {
+  await gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
     // Check if file
     if (!file || file.length === 0) {
       return res.status(404).json({
         err: 'No file exists'
       });
     }
-
     // Check if image
     if (file.contentType === 'image/jpeg' || file.contentType === 'image/png') {
       // Read output to browser
@@ -191,4 +209,16 @@ router.get('/image/:filename', (req, res) => {
     }
   });
 });
+
+router.get('/time', async (req, res) => {
+  res.json({time: new Date()})
+})
+  // @route PUT /changeOnline
+  // @desc Changing online status or when a user was online
+  router.put('/changeOnline', async (req, res) => {
+    await User.updateOne({ _id: req.body.id },{isOnline: req.body.bool})
+    if(!req.body.bool)
+      await User.updateOne({ _id: req.body.id },{lastActivity: req.body.lastActivity})
+    res.end()
+      })
 module.exports = router

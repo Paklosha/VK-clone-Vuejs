@@ -18,5 +18,14 @@ export default {
     ToolBar,
     Footer
   },
+  beforeMount(){
+ window.addEventListener('load', (event) => {
+        this.$store.commit('changeContentVisibility')
+});
+  },
 };
 </script>
+<style>
+
+
+</style>

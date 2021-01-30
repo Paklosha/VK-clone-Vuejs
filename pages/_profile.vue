@@ -1,7 +1,10 @@
 <template>
   <v-card class="d-flex justify-center container" flat tile>
-    <div id="loader" v-show="isLoader"></div>
-    <v-card class="menu" outlined tile>
+    <div id="loader" 
+    v-bind:class="{'d-none': contentVisible,'d-block': !contentVisible }">
+    </div>
+    <v-card class="menu" outlined tile
+     v-bind:class="{'d-none': !contentVisible }">
       <ul class="no-bullets">
         <li>
           <NuxtLink :to="loggedInUser._id">
@@ -14,7 +17,7 @@
         <li>
           <v-icon color="#99b0c6">fas fa-newspaper</v-icon>
           <div class="my-space-between">
-            <span style="margin-left: 4px">News</span>
+            <span style="margin-left: 4px" id="syka">News</span>
             <span
               class="notification"
               v-bind:class="{ 'd-none': notifications.news == 0 }"
@@ -60,7 +63,8 @@
       </ul>
     </v-card>
 
-    <v-card class="pa-2 photo">
+    <v-card class="pa-2 photo"
+    v-bind:class="{'d-none': !contentVisible }">
       <v-dialog
         v-model="uploadPhotoDialog"
         width="650px"
@@ -69,40 +73,105 @@
       >
         <template v-slot:activator="{ on, attrs }">
           <div class="avatar-container">
-            <img
-              :src="
-                avatar
-                  ? `${$axios.defaults.baseURL}/image/${avatar}`
-                  : require('~/assets/avatar.png')
-              "
-              alt=""
+            <img v-if="!isCurrentUserProfile" 
+            :src="publicUser.publicAvatar ? 
+            `${$axios.defaults.baseURL}/image/${publicUser.publicAvatar}` : 
+            require('~/assets/avatar.png')"
               class="profilePhoto"
               v-bind="attrs"
-              v-on="on"
-            />
+              v-on="on">
+            <img v-else :src="avatar ?
+             `${$axios.defaults.baseURL}/image/${avatar}` :
+              require('~/assets/avatar.png')"
+              class="profilePhoto"
+              v-bind="attrs"
+              v-on="on">
+
+              
+            
             <span
+              v-if="isCurrentUserProfile"
               v-bind="attrs"
               v-on="on"
               :style="avatar ? 'visibility:hidden;' : ''"
             >
               Upload a profile photo
             </span>
+            <span
+              v-else
+              v-bind="attrs"
+              v-on="on"
+              :style=" publicUser.publicAvatar ? 'visibility:hidden;' : ''"
+            >
+              Upload a profile photo
+            </span>
             <div
+              v-if="isCurrentUserProfile"
               class="overlay"
               :class="avatar ? 'd-flex flex-column' : 'd-none'"
             >
               <ul id="overlay-list">
                 <li><i class="fas fa-pencil-alt"></i>Update</li>
-                <li>
+             
+
+
+    <v-dialog
+      v-model="deleteDialog"
+      width="360"
+    >
+      <template v-slot:activator="{ on, attrs }">
+
+   <li           v-bind="attrs"
+          v-on="on">
                   <i class="fas fa-trash-alt" style="margin-right: 7px"></i
                   >Delete
                 </li>
+
+        
+      </template>
+
+      <v-card>
+
+          <v-card-title
+            class="headline lighten-2 upload-photo-title"
+            style="background-color: #f0f2f5;"
+          >
+            Are you sure that you want to delete your avatar?
+          </v-card-title>
+
+        <v-divider></v-divider>
+
+        <v-card-actions style="background-color: white;">
+          <v-spacer></v-spacer>
+          <v-btn
+            color="blue"
+            text
+            @click="deleteDialog = false"
+          >
+            Cancel
+          </v-btn>
+                    <v-btn
+            color="red"
+            text
+            @click="deleteAvatar()"
+          >
+            Delete
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+
+
+
+
+
               </ul>
             </div>
           </div>
         </template>
 
-        <v-card v-if="!avatar" class="white">
+        <v-card v-if="!avatar || (isCurrentUserProfile && !publicUser.publicAvatar)" class="white">
           <v-card-title
             class="headline lighten-2 upload-photo-title"
             style="background-color: #edeef0"
@@ -191,12 +260,13 @@
       </v-dialog>
     </v-card>
 
-    <v-card class="pa-2 info d-flex flex-column" outlined tile>
+    <v-card class="pa-2 info" outlined tile
+    v-bind:class="{ 'd-flex flex-column': contentVisible, 'd-none': !contentVisible }">
       <div class="d-flex flex-row justify-space-between">
         <h1 class="username">
           {{ publicUser.firstname + " " + publicUser.lastname }}
         </h1>
-        <span class="status">Last seen 10 minutes ago</span>
+        <span class="status">{{activityStatus}}</span>
       </div>
 
       <span class="status-message" @click="changeStatus()">
@@ -258,10 +328,16 @@
 <script>
 import { mapGetters } from "vuex";
 import { mapState } from "vuex";
+
+
+
 export default {
   layout: "profile",
   methods: {
+
+          
     openFullUserInfo: function () {
+      alert(this.date.time)
       if (this.hideShowUserInfoBtn == "Show full information") {
         this.InfoIsActive = true;
         this.hideShowUserInfoBtn = "Hide full information";
@@ -271,12 +347,17 @@ export default {
       }
     },
     changeStatus: function () {},
-    upload(event) {
+    deleteAvatar: function () {
+      this.deleteDialog = false
+      document.getElementById("loader").classList.add("d-block");
+      this.$axios.delete("/deleteAvatar", {data: {avatar : this.avatar}}).then(location.reload());
+    },
+  async upload(event) {
       //enabling loader
-      this.isLoader = !this.isLoader;
+       document.getElementById("loader").classList.add("d-block");
       let data = new FormData();
       let file = event.target.files[0];
-      console.log(this.avatar);
+  
       data.append("avatar", this.avatar);
       data.append("userId", this.$store.state.auth.user._id);
       data.append("file", file);
@@ -287,11 +368,21 @@ export default {
         },
       };
 
-      this.$axios.post("/uploadAvatar", data, config).then(location.reload());
+     await this.$axios.post("/uploadAvatar", data, config)
+     location.reload()
+     
     },
   },
   computed: {
+    activityStatus: function () {
+    if(this.isCurrentUserProfile){
+      return this.online ? 'online' : this.lastActivity
+    }
+     return this.publicUser.online ? 'online' : this.publicUser.lastActivity
+      
+    },
     ...mapGetters(["isAuthenticated", "loggedInUser"]),
+    ...mapState(["contentVisible","online","lastActivity"])
   },
   head() {
     return {
@@ -299,6 +390,8 @@ export default {
     };
   },
   async asyncData(context) {
+        //get amount of notifications
+    let date = await context.app.$axios.$get("/time");
     //get amount of notifications
     let notifications = await context.app.$axios.$post("/getNotifications", {
       id: context.store.state.auth.user._id,
@@ -321,12 +414,14 @@ export default {
         ? true
         : false;
 
-    return { publicUser, isCurrentUserProfile, notifications, avatar };
+
+    return { publicUser, isCurrentUserProfile, notifications, avatar ,date};
   },
+
   data: function () {
     return {
-      isLoader: false,
       uploadPhotoDialog: false,
+      deleteDialog: false,
       statusDialog: false,
       isLiked: true,
       hideShowUserInfoBtn: "Show full information",
@@ -339,14 +434,21 @@ export default {
 </script>
 
 <style scoped>
+.v-application .info {
+    background-color: #ffffff !important;
+    border-color: #ffffff !important;
+}
+
 #overlay-list {
   list-style: none;
   padding-top: 5px;
 }
 
 #overlay-list li {
+  font-weight: 700;
   padding-top: 10px;
   color: #d2d3d4;
+
 }
 
 #overlay-list li i {
@@ -355,29 +457,11 @@ export default {
 }
 #overlay-list li:hover {
   color: #ffffff;
+ 
   cursor: pointer;
 }
 
-#loader {
-  border: 8px solid #d9e2e9;
-  border-radius: 50%;
-  border-top: 8px solid #4a76a8;
-  width: 80px;
-  height: 80px;
-  animation: spin 2s linear infinite;
-  position: fixed;
-  margin: 25vh auto;
-  z-index: 1;
-}
 
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
 
 #myFileInput {
   display: none;

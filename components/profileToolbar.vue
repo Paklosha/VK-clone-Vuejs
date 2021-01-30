@@ -1,5 +1,6 @@
 <template>
-     <div class="nav">
+     <div class="nav"
+     v-bind:class="{'d-none': !contentVisible }">
 
   <div class="middle d-flex justify-space-between">
     <div class="item">
@@ -66,7 +67,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -79,17 +80,21 @@ export default {
     };
 },
     computed: {
-    ...mapGetters(['isAuthenticated', 'loggedInUser'])
+    ...mapGetters(['isAuthenticated', 'loggedInUser']),
+    ...mapState(["contentVisible"])
   },
 methods: {
     changeColor: function (color) {
       this.color = color
     },
     async logout() {
+      this.$store.commit('changeContentVisibility')
+      this.$store.dispatch('changeOnline',{bool:false,axios:this.$axios,lastActivity:new Date()})
       await this.$auth.logout();
-      this.$router.push('/')
+      location.replace(`${this.$url}/`)
     }
-  }
+  },
+  
 };
 </script>
 <style scoped>
